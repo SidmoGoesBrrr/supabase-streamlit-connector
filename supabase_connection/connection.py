@@ -16,7 +16,7 @@ class SUPABASECONNECTION(ExperimentalBaseConnection[supabase.Client]):
         return supabase.create_client(url, key)
     
     @cache_data(ttl=3600)
-    def select(self, table,function, ttl: int = 3600, **kwargs):
+    def _select(self, table,function, ttl: int = 3600, **kwargs):
     
         client = self._connect()
         #result=client.table(table).select(function).execute()
@@ -27,7 +27,7 @@ class SUPABASECONNECTION(ExperimentalBaseConnection[supabase.Client]):
         return result
     
     @cache_data(ttl=3600)
-    def select_filter(self, table,function, column,operator,criteria, ttl: int = 3600, **kwargs):
+    def _select_filter(self, table,function, column,operator,criteria, ttl: int = 3600, **kwargs):
         client = self._connect()
         if isinstance(function, list):
             function = ', '.join(function)
@@ -35,13 +35,13 @@ class SUPABASECONNECTION(ExperimentalBaseConnection[supabase.Client]):
         return result
     
     @cache_data(ttl=3600)
-    def insert(self, table, data, ttl: int = 3600, **kwargs):
+    def _insert(self, table, data, ttl: int = 3600, **kwargs):
         client = self._connect()
         result=client.table(table).insert(data).execute()
         return result
     
     @cache_data(ttl=3600)
-    def update(self, table, data,row_id ,ttl: int = 3600, **kwargs):
+    def _update(self, table, data,row_id ,ttl: int = 3600, **kwargs):
         client = self._connect()
         result=client.table(table).update(data).eq("id",row_id).execute()
         return result
